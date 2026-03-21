@@ -8,7 +8,9 @@
 </head>
 
 <body>
-
+<jsp:include page='header.jsp'>
+	<jsp:param name="PageTitle" value="index"/>
+</jsp:include>
 
 	<div class="hero">
 		<div class="containerTitle">
@@ -39,5 +41,8 @@
 			</div>
 		</section>
 	</main>
+		<jsp:include page='footer.html'>
+		<jsp:param name="PageTitle" value="index"/>
+	</jsp:include>
 </body>
 </html>
