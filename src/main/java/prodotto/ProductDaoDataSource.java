@@ -1,0 +1,391 @@
+package prodotto;
+
+import java.sql.Connection;
+
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+import utente.User;
+
+public class ProductDaoDataSource implements IProductDAO<ProductBean> {
+
+	private static final String TABLE_NAME = "prodotto";
+	private static DataSource ds;
+
+	//Query
+	private String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE ID_Prodotto = ?";
+	private String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
+	private String deleteSQL = "UPDATE " + TABLE_NAME + " SET disponibile = false WHERE ID_Prodotto = ?";
+	private String insertSQL = "INSERT INTO " + TABLE_NAME
+			+ " (nome, prezzo, quantita, categoria, foto, disponibile) VALUES (?, ?, ?, ?, ?, ?)";
+	private String updateSQL = "UPDATE " + TABLE_NAME
+			+ " SET nome=?, prezzo=?, quantita=?, categoria=?, foto=?, disponibile=? WHERE ID_Prodotto=?";
+
+	static {
+		try {
+			Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+
+			ds = (DataSource) envCtx.lookup("jdbc/PartC");
+
+		} catch (NamingException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+	}
+
+	//Aggiunta prodotto
+	@Override
+	public void doSave(ProductBean product) throws SQLException {
+
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+
+	    String insertSQL = "INSERT INTO " + TABLE_NAME +
+	            " (nome, prezzo, quantita, categoria, foto, disponibile) " +
+	            "VALUES (?, ?, ?, ?, ?, ?)";
+
+	    try {
+	        connection = ds.getConnection();
+	        preparedStatement = connection.prepareStatement(insertSQL);
+
+	        preparedStatement.setString(1, product.getName());
+	        preparedStatement.setDouble(2, product.getPrice());
+	        preparedStatement.setInt(3, product.getQuantity());
+	        preparedStatement.setString(4, product.getCategory());
+	        preparedStatement.setString(5, product.getPhoto()); 
+	        preparedStatement.setBoolean(6, product.isAvailable());
+
+	        preparedStatement.executeUpdate();
+
+	        System.out.println("PRODOTTO INSERITO CORRETTAMENTE");
+
+	    } finally {
+	        if (preparedStatement != null) preparedStatement.close();
+	        if (connection != null) connection.close();
+	    }
+	}
+
+	//Aggiorna prodotto
+	@Override
+	public void doUpdate(ProductBean product) throws SQLException {
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+
+	    String updateSQL = "UPDATE " + TABLE_NAME +
+	            " SET nome = ?, prezzo = ?, quantita = ?, categoria = ?, foto = ?, disponibile = ? " +
+	            "WHERE ID_Prodotto = ?";
+
+	    try {
+	        connection = ds.getConnection();
+	        preparedStatement = connection.prepareStatement(updateSQL);
+
+	        //Imposto i valori dal bean
+	        preparedStatement.setString(1, product.getName() != null ? product.getName() : "");
+	        preparedStatement.setDouble(2, product.getPrice());
+	        preparedStatement.setInt(3, product.getQuantity());
+	        preparedStatement.setString(4, product.getCategory() != null ? product.getCategory() : "");
+	        preparedStatement.setString(5, product.getPhoto() != null ? product.getPhoto() : "");
+	        preparedStatement.setBoolean(6, product.isAvailable());
+	        preparedStatement.setInt(7, product.getCode());
+
+	        preparedStatement.executeUpdate();
+
+	    } finally {
+	        if (preparedStatement != null) preparedStatement.close();
+	        if (connection != null) connection.close();
+	    }
+	}
+
+	//Rimozione prodotto
+	@Override
+	public boolean doRemove(int code) throws SQLException {
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+
+	    int result = 0;
+	    String deleteSQL = "DELETE FROM " + ProductDaoDataSource.TABLE_NAME + " WHERE ID_prodotto = ?";
+
+	    try {
+	        connection = ds.getConnection();
+	        preparedStatement = connection.prepareStatement(deleteSQL);
+	        preparedStatement.setInt(1, code);
+
+	        result = preparedStatement.executeUpdate();
+
+	    } finally {
+	        if (preparedStatement != null) preparedStatement.close();
+	        if (connection != null) connection.close();
+	    }
+	    return (result != 0);
+	}
+
+
+	@Override
+	public synchronized ProductBean doRetrieveByKey(int code) throws SQLException {
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+
+	    ProductBean bean = null;
+
+	    try {
+	        connection = ds.getConnection();
+	        preparedStatement = connection.prepareStatement(selectSQL);
+	        preparedStatement.setInt(1, code);
+
+	        ResultSet rs = preparedStatement.executeQuery();
+
+	        if (rs.next()) {  
+	            bean = new ProductBean();
+	            bean.setCode(rs.getInt("ID_prodotto"));
+	            bean.setName(rs.getString("nome"));
+	            bean.setCategory(rs.getString("categoria"));
+	            bean.setPhoto(rs.getString("foto"));
+	            bean.setPrice((float) rs.getDouble("prezzo"));
+	            bean.setQuantity(rs.getInt("quantita"));  
+	            bean.setAvailable(rs.getBoolean("disponibile")); 
+	        }
+
+	    } finally {
+	        if (preparedStatement != null) preparedStatement.close();
+	        if (connection != null) connection.close();
+	    }
+	    return bean;
+	}
+
+	//Cerca prodotto per nome
+	@Override
+	public ArrayList<ProductBean> doRetrieveByName(String name) throws SQLException {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		ArrayList<ProductBean> beanz = new ArrayList<ProductBean>();
+
+		String selectNameSQL = "SELECT * FROM " + ProductDaoDataSource.TABLE_NAME + " WHERE nome LIKE ?";
+
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(selectNameSQL);
+			preparedStatement.setString(1, "%" + name + "%");
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+				ProductBean bean = new ProductBean();
+				bean.setCode(rs.getInt("ID_prodotto"));
+				bean.setName(rs.getString("nome"));
+				bean.setCategory(rs.getString("categoria"));
+				bean.setPhoto(rs.getString("foto"));
+				bean.setPrice((float) rs.getDouble("prezzo"));
+				beanz.add(bean);
+
+			}
+
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null)
+					connection.close();
+			}
+		}
+		return beanz;
+	}
+
+
+	//Cerca prodotto per categoria
+	@Override
+	public ArrayList<ProductBean> doRetrieveByCategory(String categoria) throws SQLException {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		ArrayList<ProductBean> beanz = new ArrayList<ProductBean>();
+
+		String selectNameSQL = "SELECT * FROM " + ProductDaoDataSource.TABLE_NAME + " WHERE categoria = ?";
+
+		
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(selectNameSQL);
+			preparedStatement.setString(1, categoria);
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+				ProductBean bean = new ProductBean();
+				bean.setCode(rs.getInt("ID_prodotto"));
+				bean.setName(rs.getString("nome"));
+				bean.setCategory(rs.getString("categoria"));
+				bean.setPhoto(rs.getString("foto"));
+				bean.setPrice((float)rs.getDouble("prezzo"));
+				beanz.add(bean);
+			
+			}
+
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null)
+					connection.close();
+			}
+		}
+		return beanz;
+	}
+
+
+	@Override
+	public synchronized ArrayList<ProductBean> doRetrieveAvailable() throws SQLException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		ArrayList<ProductBean> products = new ArrayList<ProductBean>();
+
+		String selectSQL = "SELECT * FROM " + ProductDaoDataSource.TABLE_NAME + " WHERE disponibile = TRUE";
+		connection = ds.getConnection();
+		try {
+		
+		
+			preparedStatement = connection.prepareStatement(selectSQL);
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+				ProductBean bean = new ProductBean();
+				
+				bean.setCode(rs.getInt("ID_prodotto"));
+				bean.setCategory(rs.getString("categoria"));
+				bean.setName(rs.getString("nome"));
+				bean.setPrice(rs.getFloat("prezzo"));
+				bean.setPhoto(rs.getString("foto"));
+				bean.setAvailable(rs.getBoolean("disponibile"));
+				
+				products.add(bean);
+			}
+
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null)
+					connection.close();
+			}
+		}
+		return products;
+	}
+
+
+	//Tutti i prodotti
+	@Override
+	public ArrayList<ProductBean> doRetrieveAll(String order) throws SQLException {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		ArrayList<ProductBean> products = new ArrayList<ProductBean>();
+
+		String selectSQL = "SELECT * FROM " + ProductDaoDataSource.TABLE_NAME;
+		connection = ds.getConnection();
+		try {
+		
+		if (order != null && !order.equals("")) {
+			selectSQL += " ORDER BY ?";
+			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setString(1, order);
+		}else {
+			preparedStatement = connection.prepareStatement(selectSQL);
+		}
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+			    ProductBean bean = new ProductBean();
+
+			    bean.setCode(rs.getInt("ID_prodotto"));      
+			    bean.setName(rs.getString("nome"));
+			    bean.setCategory(rs.getString("categoria"));
+			    bean.setPrice(rs.getFloat("prezzo"));
+			    bean.setQuantity(rs.getInt("quantita"));    
+			    bean.setPhoto(rs.getString("foto"));
+			    bean.setAvailable(rs.getBoolean("disponibile"));
+
+			    products.add(bean);
+			}
+
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null)
+					connection.close();
+			}
+		}
+		return products;
+	}
+
+	/*Registra un ordine e i prodotti acquistati
+	@Override
+	public void doBuy(ArrayList<ProductBean> products, User u) throws SQLException {
+
+	}
+	*/
+
+
+	//Restituisce i 3 prodotti con il prezzo minore 
+	@Override
+	public ArrayList<ProductBean> doRetriveByMinPrice() throws SQLException {
+		String query = "SELECT * " + "FROM " + ProductDaoDataSource.TABLE_NAME
+				+ " JOIN (SELECT categoria, MIN(prezzo) AS prezzo_min " + "FROM " + ProductDaoDataSource.TABLE_NAME
+				+ " GROUP BY categoria) " + "m ON " + ProductDaoDataSource.TABLE_NAME + ".categoria = m.categoria AND "
+				+ ProductDaoDataSource.TABLE_NAME + ".prezzo = m.prezzo_min " + "ORDER BY "
+				+ ProductDaoDataSource.TABLE_NAME + ".prezzo ASC " + "LIMIT 3";
+
+		ArrayList<ProductBean> products = new ArrayList<>();
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(query);
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+				ProductBean p = new ProductBean();
+
+				p.setCode(rs.getInt("ID_prodotto"));
+				p.setName(rs.getString("nome"));
+				p.setCategory(rs.getString("categoria"));
+				p.setPhoto(rs.getString("foto"));
+				p.setPrice((float) rs.getDouble("prezzo"));
+				products.add(p);
+			}
+
+		} finally {
+
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null)
+					connection.close();
+			}
+		}
+
+		return products;
+	}
+
+}

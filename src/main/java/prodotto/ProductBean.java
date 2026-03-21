@@ -16,7 +16,7 @@ public class ProductBean implements Serializable {
     private String photo;
     private boolean available;
 
-    // Costruttore vuoto
+    //Costruttore vuoto
     public ProductBean() {
         this.code = -1;
         this.name = "";
@@ -27,7 +27,7 @@ public class ProductBean implements Serializable {
         this.available = true;
     }
 
-    // Costruttore con campi principali
+    //Costruttore con campi principali
     public ProductBean(int code, String name, double price, String category) {
         this.code = code;
         this.name = name;
@@ -38,7 +38,7 @@ public class ProductBean implements Serializable {
         this.available = true;
     }
 
-    // Metodi get
+    //Metodi get
     public int getCode() { 
     	return code; 
     }
@@ -67,7 +67,7 @@ public class ProductBean implements Serializable {
     	return available; 
     }
 
-    // Metodi set
+    //Metodi set
     
     public void setCode(int code) {
     	this.code = code; 
@@ -92,7 +92,7 @@ public class ProductBean implements Serializable {
                 return;
             }
         }
-        this.category = ""; // fallback se categoria non valida
+        this.category = ""; 
     }
     
     public void setPhoto(String photo) {
