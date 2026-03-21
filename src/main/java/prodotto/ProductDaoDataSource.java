@@ -88,7 +88,7 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 	        connection = ds.getConnection();
 	        preparedStatement = connection.prepareStatement(updateSQL);
 
-	        //Imposto i valori dal bean
+	        // Imposto i valori dal bean
 	        preparedStatement.setString(1, product.getName() != null ? product.getName() : "");
 	        preparedStatement.setDouble(2, product.getPrice());
 	        preparedStatement.setInt(3, product.getQuantity());

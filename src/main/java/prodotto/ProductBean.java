@@ -7,7 +7,7 @@ public class ProductBean implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String[] CATEGORIE = {"Motherboard", "PSU", "RAM", "CPU", "GPU", "Storage", "Case", "Acc"};
 
-    //Variabili
+    // Variabili
     private int code;
     private String name;
     private double price;
