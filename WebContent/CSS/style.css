@@ -1,0 +1,182 @@
+.hero {
+	background: #3b5d50;
+	padding: 0px 5%;
+}
+
+.hero h1 {
+	font-weight: 700;
+	font-size: 2em;
+	color: #fff;
+	padding: 30px 0px;
+	margin: 0px;
+}
+
+.divider {
+	display: flex;
+	align-items: center;
+	text-align: center;
+	margin: 20px 5%;
+	padding-top: 30px;
+}
+
+.divider::before,
+.divider::after {
+	content: '';
+	flex: 1;
+	border-bottom: 1px solid #ddd;
+}
+
+.divider:not(:empty)::before {
+	margin-right: .75em;
+}
+
+.divider:not(:empty)::after {
+	margin-left: .75em;
+}
+
+.containerTitle {
+	padding: 0px;
+}
+
+.homeShop {
+	min-height: 500px;
+	padding: 100px;
+}
+
+.homeRow {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	justify-content: center;
+}
+
+.productContainer {
+	flex: 0 0 auto;
+	padding: 10px;
+	width: 100%;
+}
+
+.productContainer .productItem {
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	position: relative;
+	padding-bottom: 50px;
+	cursor: pointer;
+}
+
+.productContainer .productItem .productImg {
+	position: relative;
+	top: 0;
+	width: 90%;
+	transition: 0.3s all ease;
+}
+
+.productContainer .productItem .productTitle,
+.productContainer .productItem .productPrice {
+	color: #2f2f2f;
+	text-decoration: none;
+}
+
+.productContainer .productItem .productPrice {
+	font-weight: 800 !important;
+	font-size: 18px !important;
+}
+
+.productContainer .productItem .crossIcon {
+	position: absolute;
+	width: 35px;
+	height: 35px;
+	display: inline-block;
+	background: #2f2f2f;
+	bottom: 15px;
+	left: 50%;
+	transform: translateX(-50%);
+	margin-bottom: -17.5px;
+	border-radius: 50%;
+	opacity: 0;
+	visibility: hidden;
+	transition: 0.3s all ease;
+}
+
+.productContainer .productItem .crossIcon img {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.productContainer .productItem:before {
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: absolute;
+	content: "";
+	background: #dce5e4;
+	height: 0%;
+	z-index: -1;
+	border-radius: 10px;
+	transition: 0.3s all ease;
+
+}
+
+.productContainer .productItem:hover .productImg {
+	top: -25px;
+
+}
+
+.productContainer .productItem:hover .crossIcon {
+	bottom: 0;
+	opacity: 1;
+	visibility: visible;
+
+}
+
+.productContainer .productItem:hover:before {
+	height: 70%;
+}
+
+.productContainer #empty:before {
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: absolute;
+	content: "";
+	background: transparent;
+	height: 0%;
+	z-index: -1;
+	border-radius: 10px;
+	transition: none;
+}
+
+.productContainer #empty:hover .productImg {
+	top: 0;
+}
+
+@media (min-width : 768px) {
+	.hero h1 {
+		font-size: 30px;
+	}
+
+	.productContainer {
+		width: 33.33333333%;
+	}
+
+}
+
+@media (min-width : 995px) {
+
+	.hero h1 {
+		font-size: 35px;
+	}
+
+	.productContainer {
+		width: 25%;
+	}
+}
+
+@media (min-width : 1400px) {
+	.hero h1 {
+		font-size: 40px;
+	}
+}
