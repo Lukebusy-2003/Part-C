@@ -1,0 +1,249 @@
+package utente;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+import prodotto.ProductBean;
+import prodotto.ProductDaoDataSource;
+
+
+public class UsersDaoDataSource implements IUsersDAO<User> {
+
+	private static DataSource ds;
+	private static final String TABLE_NAME = "utente";
+
+	// Connessione al database tramite DataSource
+	static {
+		try {
+			Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+
+			ds = (DataSource) envCtx.lookup("jdbc/PartC");
+
+		} catch (NamingException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+	}
+
+	// Aggiunta utente
+	@Override
+	public synchronized void doSave(User utente) throws SQLException {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		
+		//Query di inserimento
+		String insertSQL = "INSERT INTO " + UsersDaoDataSource.TABLE_NAME
+				+ " (email, pwd, nome, cognome, isAdmin) VALUES (?, ?, ?, ?, ?)";
+
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(insertSQL);
+			
+			// Imposto i valori
+			preparedStatement.setString(3, utente.getNome());
+			preparedStatement.setString(4, utente.getCognome());
+			preparedStatement.setString(1, utente.getEmail());
+			preparedStatement.setString(2, utente.getPassword());
+			preparedStatement.setBoolean(5, utente.isAdmin());
+
+			preparedStatement.executeUpdate();
+
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null) connection.close();
+			}
+		}
+	}
+
+	// Eliminazione utente tramite email
+	@Override
+	public synchronized boolean doDelete(String email) throws SQLException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		int result = 0;
+
+		String deleteSQL = "DELETE FROM " + UsersDaoDataSource.TABLE_NAME + " WHERE email = ?";
+
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(deleteSQL);
+			preparedStatement.setString(1, email);
+
+			result = preparedStatement.executeUpdate();
+
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null)
+					connection.close();
+			}
+		}
+		return (result != 0);
+	}
+
+	// Recupera tutti gli utenti
+	@Override
+	public synchronized ArrayList<User> doRetrieveAll(String order) throws SQLException {
+
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ArrayList<User> utenti = new ArrayList<User>();
+
+	    String selectSQL = "SELECT * FROM " + TABLE_NAME;
+
+	    try {
+	        connection = ds.getConnection();
+	        preparedStatement = connection.prepareStatement(selectSQL);
+
+	        ResultSet rs = preparedStatement.executeQuery();
+
+	        while (rs.next()) {
+
+	            User bean = new User();
+
+	            bean.setNome(rs.getString("nome"));
+	            bean.setCognome(rs.getString("cognome"));
+	            bean.setPassword(rs.getString("pwd"));
+	            bean.setEmail(rs.getString("email"));
+	            bean.setAdmin(rs.getBoolean("isAdmin"));
+
+	            utenti.add(bean);
+	        }
+
+	    } finally {
+	        if (preparedStatement != null)
+	            preparedStatement.close();
+	        if (connection != null)
+	            connection.close();
+	    }
+
+	    return utenti;
+	}
+
+	// Ricerca utente per nome
+	@Override
+	public User doRetrieveByName(String name) throws SQLException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		User bean = new User();
+
+		String selectSQL = "SELECT * FROM " + UsersDaoDataSource.TABLE_NAME + " WHERE nome = ?";
+
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setString(1, name);
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+				bean.setNome(rs.getString("nome"));
+				bean.setCognome(rs.getString("cognome"));
+				bean.setEmail(rs.getString("email"));
+				bean.setPassword(rs.getString("pwd"));
+				bean.setAdmin(rs.getBoolean("isAdmin"));
+			}
+
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null)
+					connection.close();
+			}
+		}
+		return bean;
+	
+	}
+
+	// Ricerca utente per email
+	public User doRetrieveByEmail(String mail) throws SQLException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		User bean = new User();
+
+		String selectSQL = "SELECT * FROM " + UsersDaoDataSource.TABLE_NAME + " WHERE email = ?";
+
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(selectSQL);
+			
+			preparedStatement.setString(1, mail);
+
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			//Se non trova risultati
+			if(!rs.isBeforeFirst()) 
+				bean = null;
+			else {
+				while (rs.next()) {
+					
+				bean.setNome(rs.getString("nome"));
+				bean.setCognome(rs.getString("cognome"));
+				bean.setEmail(rs.getString("email"));
+				bean.setPassword(rs.getString("pwd"));
+				bean.setAdmin(rs.getBoolean("isAdmin"));
+				
+				}
+			}			
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null)
+					connection.close();
+			}
+		}
+		return bean;
+	
+	}
+	
+	// Aggiorna ruolo admin dell'utente
+	@Override 
+	public void doUpdate(User user) throws SQLException {
+
+	    String updateSQL = "UPDATE " + TABLE_NAME + 
+	                       " SET isAdmin = ? WHERE email = ?";
+
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+
+	    try {
+	        connection = ds.getConnection();
+	        preparedStatement = connection.prepareStatement(updateSQL);
+
+	        // Imposto nuovi valori
+	        preparedStatement.setBoolean(1, user.isAdmin());
+	        preparedStatement.setString(2, user.getEmail());
+
+	        preparedStatement.executeUpdate();
+
+	    } finally {
+	        if(preparedStatement != null)
+	            preparedStatement.close();
+	        if(connection != null)
+	            connection.close();
+	    }
+	}
+	
+}
