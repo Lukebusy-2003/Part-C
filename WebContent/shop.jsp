@@ -2,6 +2,15 @@
     pageEncoding="UTF-8"
     import="java.util.ArrayList, prodotto.ProductBean, prodotto.ProductDaoDataSource, java.text.DecimalFormat" %>
 
+<%
+DecimalFormat df = new DecimalFormat("#.##");
+
+ArrayList<ProductBean> prodotti = (ArrayList<ProductBean>) request.getAttribute("products1");
+
+if (prodotti == null) {
+    prodotti = new ArrayList<>(); 
+}
+%>
 
 <!doctype html>
 <html lang="it">
@@ -86,7 +95,7 @@
             <section class="Shop">
                 <div class="ShopRow">
 
-                   
+                    <% if (prodotti == null || prodotti.isEmpty()) { %>
 
                         <div class="productContainer">
                             <a class="productItem" id="empty">
@@ -95,30 +104,62 @@
                             </a>
                         </div>
 
-                    
+                    <% } else { %>
+
+                        <% for (ProductBean p : prodotti) { %>
 
                         <div id="shopProduct" class="productContainer">
                             <a class="productItem">
 								<div class="imgBox">
-                                	<img src="img/products/AorusB450PRO.png" class="ProductImage productImg">
+                                	<img src="<%=request.getServletContext().getContextPath()%>/<%=p.getPhoto()%>" class="ProductImage productImg">
 								</div>
-                                <h3 class="productTitle">Titolo</h3>
+                                <h3 class="productTitle"><%=p.getName()%></h3>
 
                                 <strong class="productPrice">
-                                    Prezzo &#128;
+                                    <%=df.format(p.getPrice())%> &#128;
                                 </strong>
 
-                                <span class="crossIcon" onclick="...">
+                                <span class="crossIcon" onclick="openPopup('<%=p.getCode()%>')">
                                     <img src="img/icons/cross.svg" class="ProductImage">
                                 </span>
 
                             </a>
                         </div>
+
+                        <% } %>
+
+                    <% } %>
+
                 </div>
             </section>
         </div>
     </div>
 </main>
+
+
+<div class="popup-overlay">
+    <div class="popup">
+
+        <a class="close" onclick="...">x</a>
+
+        <div class="popup-content">
+
+            <p>Inserisci quantità:</p>
+
+            <div class="wau">
+                <input type="number" placeholder="quantità" id="inputQty" min="1">
+            </div>
+
+            <a class="addcart" onclick="...">
+                Aggiungi al carrello
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+
 
 <jsp:include page='footer.html'>
     <jsp:param name="PageTitle" value="index" />
