@@ -528,6 +528,143 @@ footer .navbar .NavbarSub li .navLinkFooter:before {
 	max-height: 90%;
 	object-fit: contain;
 }
+
+/*CARRELLO------------------------------------------*/
+
+.bg {
+	position: relative;
+	background-color: transparent;
+	margin-left: 10%;
+	margin-right: 10%;
+	height: 100%;
+	min-height: 100vh;
+}
+
+.cartContainer {
+	width: 100%;
+	padding: 0px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.itemContainer {
+	position: relative;
+	padding: 0;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.cartRow {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	justify-content: center;
+}
+
+.generiContainer {
+	position: relative;
+	width: 100%;
+	flex: 0 0 50%;
+	max-width: 50%;
+}
+
+.status {
+	text-align: right;
+}
+
+.finalPrice {
+	font-weight: 900;
+}
+
+.CheckOutContainer {
+	position: relative;
+	width: 100%;
+	padding-right: 15px;
+	padding-left: 15px;
+	padding-top: 1.5rem;
+	padding-bottom: 1.5rem;
+}
+
+.checkOutBtn {
+	float: right;
+	font-weight: 500;
+	background-color: #CE8946;
+	text-align: center;
+	vertical-align: middle;
+	border: none;
+	border-radius: 20px;
+	padding: 10px 30px;
+	font-size: 19px;
+	color: #fff;
+	text-decoration: none;
+	margin: 0 15px;
+}
+
+.checkOutBtn:hover {
+	text-decoration: none;
+	color: #fff;
+	opacity: 0.8;
+}
+
+#empty-cart-message {
+	text-align: center;
+}
+
+#empty-cart-message .cartRow {
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+#empty-cart-message .imgContainer {
+	margin-bottom: 15px;
+}
+
+.cart-item {
+	background-color: #fff;
+	border-radius: 10px;
+	padding: 15px 20px;
+	margin-bottom: 20px;
+}
+
+.cart-item h5 {
+	padding: 0 2%;
+	align-content: center;
+	margin: 0px;
+}
+
+.kaioken {
+	padding-right: 30px;
+}
+
+#pImg,
+#pImg2 {
+	vertical-align: middle;
+	width: 50px;
+	height: 50px;
+}
+
+#pImg3 {
+	width: 50px;
+	height: 50px;
+}
+
+.dataContainer {
+	position: relative;
+	padding: 0 5%;
+}
+
+.center-item {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+#cartVuoto {
+	font-size: 20px;
+}
 /*Media------------------------------------------*/
 
 @media (min-width : 500px) {
@@ -609,7 +746,18 @@ footer .navbar .NavbarSub li .navLinkFooter:before {
 	.searchContainer {
 		width: 25%;
 	}
+	.CheckOutContainer {
+		flex: 0 0 100%;
+		max-width: 100%;
+	}
 
+}
+
+@media (min-width : 992px) {
+	.itemContainer {
+		flex: 0 0 50%;
+		max-width: 83.3%;
+	}
 }
 
 @media (min-width : 995px) {
