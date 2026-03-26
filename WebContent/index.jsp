@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.ArrayList,prodotto.ProductBean,prodotto.ProductDaoDataSource,java.text.DecimalFormat"%>
+    pageEncoding="UTF-8" import="java.util.ArrayList,prodotto.ProductBean,prodotto.ProductDaoDataSource,java.text.DecimalFormat"%> <!-- CARRELLO!!!!!!!!!!!!!!!!!!!!!!!!!!! -->  
  
 <%
 DecimalFormat df = new DecimalFormat("#.##");
@@ -24,6 +24,7 @@ try {
 <html lang="it">
 <head>
 	<meta charset="utf-8">
+	<script type="text/javascript" src="JS/scripts.js"></script>
 	<link href="CSS/style.css" rel="stylesheet">
 	<link rel="icon" type="image/svg+xml" href="img/logo/logo.svg">
 	<title>Part-C</title>
@@ -41,6 +42,7 @@ try {
 			<h1>Home</h1>
 		</div>
 	</div>
+
 
 	<main>
 		<div class="divider"><span>PRODOTTI CONSIGLIATI</span></div>
@@ -64,7 +66,7 @@ try {
 						<h3 class="productTitle"><%=p.getName()%></h3>
 						<strong class="productPrice"><%=df.format(p.getPrice())%> &#128;</strong>
 
-						<span class="crossIcon" onclick="...">
+						<span class="crossIcon" onclick="openPopup('<%=p.getCode()%>')">
 							<img src="img/icons/cross.svg" class="ProductImage">
 						</span>
 					</a>
@@ -73,13 +75,13 @@ try {
 			</div>
 			<div class="popup-overlay">
 				<div class="popup">
-					<a class="close" onclick="...">x</a>
+					<a class="close" onclick="closePopupFunc()">x</a>
 					<div class="popup-content">
 						<p>inserisci quantita':</p>
 						<div class="wau">
 							<input type="number" placeholder="quantita'" id="inputQty" min="1">
 						</div>
-						<a class="addcart" onclick="...">Aggiungi al carrello</a>
+						<a class="addcart" onclick="modificaCarrello('add')">Aggiungi al carrello</a>
 					</div>
 				</div>
 			</div>

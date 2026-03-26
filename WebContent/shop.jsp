@@ -16,6 +16,7 @@ if (prodotti == null) {
 <html lang="it">
 <head>
 <meta charset="utf-8">
+<script type="text/javascript" src="JS/scripts.js"></script>
 <link href="CSS/style.css" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="img/logo/logo.svg">
 <title>Part-C</title>
@@ -40,49 +41,49 @@ if (prodotti == null) {
             <div class="category">
                 <h2>Categorie</h2>
 				<div class="categoryItem">
-    				<a class="selectionMenu" href="#">
+    				<a class="selectionMenu" href="Shop?filter=Tutto&action=categoria">
         				<img class="categoryIcon" src="img/icons/iconAll.png"><span>Tutti i prodotti</span>
     				</a>
 				</div>
 				
                 <div class="categoryItem">
-                    <a class="selectionMenu" href="#">
+                    <a class="selectionMenu" href="Shop?filter=Motherboard&action=categoria">
                         <img class="categoryIcon" src="img/icons/iconMb.png"><span>Schede Madre</span>
                     </a>
                 </div>
 
                 <div class="categoryItem">
-                    <a class="selectionMenu" href="#">
+                    <a class="selectionMenu" href="Shop?filter=CPU&action=categoria">
                         <img class="categoryIcon" src="img/icons/iconCPU.png"><span>Processori</span>
                     </a>
                 </div>
 
                 <div class="categoryItem">
-                    <a class="selectionMenu" href="#">
+                    <a class="selectionMenu" href="Shop?filter=RAM&action=categoria">
                         <img class="categoryIcon" src="img/icons/iconRAM.png"><span>RAM</span>
                     </a>
                 </div>
 
                 <div class="categoryItem">
-                    <a class="selectionMenu" href="#">
+                    <a class="selectionMenu" href="Shop?filter=GPU&action=categoria">
                         <img class="categoryIcon" src="img/icons/iconGPU.png"><span>Schede Video</span>
                     </a>
                 </div>
 
                 <div class="categoryItem">
-                    <a class="selectionMenu" href="#">
+                    <a class="selectionMenu" href="Shop?filter=PSU&action=categoria">
                         <img class="categoryIcon" src="img/icons/iconPSU.png"><span>Alimentatori</span>
                     </a>
                 </div>
 
                 <div class="categoryItem">
-                    <a class="selectionMenu" href="#">
+                    <a class="selectionMenu" href="Shop?filter=Storage&action=categoria">
                         <img class="categoryIcon" src="img/icons/iconSSD.png"><span>Archiviazione</span>
                     </a>
                 </div>
 
                 <div class="categoryItem">
-                    <a class="selectionMenu" href="#">
+                    <a class="selectionMenu" href="Shop?filter=Case&action=categoria">
                         <img class="categoryIcon" src="img/icons/iconCase.png"><span>Case</span>
                     </a>
                 </div>
@@ -137,10 +138,11 @@ if (prodotti == null) {
 </main>
 
 
-<div class="popup-overlay">
+
+<div class="popup-overlay" id="popupOverlay">
     <div class="popup">
 
-        <a class="close" onclick="...">x</a>
+        <a class="close" onclick="closePopupFunc()">x</a>
 
         <div class="popup-content">
 
@@ -150,7 +152,7 @@ if (prodotti == null) {
                 <input type="number" placeholder="quantità" id="inputQty" min="1">
             </div>
 
-            <a class="addcart" onclick="...">
+            <a class="addcart" onclick="modificaCarrello('add')">
                 Aggiungi al carrello
             </a>
 
@@ -160,6 +162,7 @@ if (prodotti == null) {
 </div>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <jsp:include page='footer.html'>
     <jsp:param name="PageTitle" value="index" />

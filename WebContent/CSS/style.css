@@ -81,6 +81,10 @@
 	transition: 0.3s all ease;
 }
 
+#emptyImg {
+	opacity: 0.6;
+}
+
 .productContainer .productItem .productTitle,
 .productContainer .productItem .productPrice {
 	color: #2f2f2f;
@@ -512,6 +516,10 @@ footer .navbar .NavbarSub li .navLinkFooter:before {
 	height: 38px;
 	margin-right: 15px;
 	vertical-align: middle;
+}
+
+#shopProduct {
+	padding: 20px;
 }
 
 .imgBox {
