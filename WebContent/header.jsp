@@ -1,10 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" %>
+    pageEncoding="UTF-8" import="utente.User,prodotto.ProductBean, acquisto.Cart"%>
  
+<%
+	User user = (User)session.getAttribute("user");
+	//User user = new User();
+	//user.setAdmin(false);
+	
+	Cart cart = (Cart)request.getSession().getAttribute("cart");
+	if(cart == null){
+		cart = new Cart();
+		request.getSession().setAttribute("cart",cart); 		
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
-
+<script type="text/javascript" src="JS/scripts.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -14,28 +25,33 @@
 				<a href="index.jsp">
 					<img class="logo" src="img/logo/logo.svg">
 				</a>
-				<a class="navBrand" href="index.html">P<span>art-</span>C</a>
+				<a class="navBrand" href="index.jsp">P<span>art-</span>C</a>
 			</div>
 
 			<div class="searchContainer">
 				<div class="searchInput">
-					<img id="searchIcon" src="img/icons/lens.svg" onclick="...">
+					<img id="searchIcon" src="img/icons/lens.svg" onclick="Ricerca()">
 					<input type="text" id="input" name="searchBox" placeholder="Search...">
 				</div>
 			</div>
 
 			<div class="centerPosition">
 				<ul class="NavbarSub">
-					<li><a class="navLink" href="index.html">Home</a></li>
-					<li><a class="navLink" href="#">Shop</a></li>
-					<li><a class="navIconLink" href="#"><img class="navIcon" src="img/icons/userUn.png"></a></li>
-					<li><a class="navIconLink" href="#"><img class="navIcon" src="img/icons/userLog.png"></a></li>
-					<li><a class="navIconLink" href="#"><img class="navIcon" src="img/icons/userLog.png"></a></li>
-					<li><a class="navIconLink" href="#"><img class="navIcon" src="img/icons/admin.svg"></a></li>
+					<li><a class="navLink" href="index.jsp">Home</a></li>
+					<li><a class="navLink" href="Shop?filter=Tutto&action=categoria">Shop</a></li>
+					<%if(user == null){%>
+						<li><a class="navIconLink" href="login.jsp"><img class="navIcon" src="img/icons/userUn.png"></a></li>
+						
+					<%}else if(user != null && !user.isAdmin()){%>
+						<li><a class="navIconLink" href="Logout"><img class="navIcon" src="img/icons/userLog.png"></a></li>
+						
+					<%}else if(user != null && user.isAdmin()){%>
+						<li><a class="navIconLink" href="Logout"><img class="navIcon" src="img/icons/userLog.png"></a></li>
+						<li><a class="navIconLink" href="Admin"><img class="navIcon" src="img/icons/admin.svg"></a></li>
+					<%}%>
 						<div class="kamehameha">
-							
-
-							<li><a class="navIconLink" href="#"><img class="navIcon" src="img/icons/cart.svg"></a></li>
+							<span class="badge"><%=cart.getCount()%></span>
+							<li><a class="navIconLink" href="cart.jsp"><img class="navIcon" src="img/icons/cart.svg"></a></li>
 						</div>
 				</ul>
 			</div>

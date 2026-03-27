@@ -387,6 +387,23 @@
 	padding: 0;
 }
 
+.kamehameha .badge {
+	position: absolute;
+	top: 0px;
+	right: 5px;
+	bottom: 60%;
+	background-color: red;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	font-size: 12px;
+	padding: 0px 5px;
+	z-index: 1;
+	color: #fff;
+}
+
 .navbar .NavbarSub li .navLink:before,
 .navbar .NavbarSub li .navIconLink:before,
 .navbar .NavbarSub li .navSearch:before {
@@ -535,6 +552,61 @@ footer .navbar .NavbarSub li .navLinkFooter:before {
 	max-width: 90%;
 	max-height: 90%;
 	object-fit: contain;
+}
+
+/* LOGIN ---------------------------------------------------------------------------------------------------------------------------------------------*/
+
+.background {
+	background-color: #3b5d50;
+}
+
+.login {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+.loginForm {
+	width: 300px;
+	padding: 30px;
+	border: 1px solid #f1f1f1;
+	background: #fff;
+	box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.10);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border-radius: 20px;
+}
+
+.loginForm h2 {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.centerBtn {
+	text-align: center;
+}
+
+.loginForm button[type="submit"],
+button[type="button"] {
+	padding: 10px;
+	align-items: center;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	background-color: #CE8946;
+	color: #fff;
+	border-radius: 20px;
+	padding-bottom: 10px;
+}
+
+.loginForm button:hover {
+	opacity: 0.8;
+}
+
+.loginForm #reg {
+	padding-top: 15px;
 }
 
 /*CARRELLO------------------------------------------*/
@@ -785,6 +857,10 @@ footer .navbar .NavbarSub li .navLinkFooter:before {
 
 	.searchContainer {
 		width: 30%;
+	}
+	
+		.kamehameha .badge {
+		right: 15px;
 	}
 }
 
