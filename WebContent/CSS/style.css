@@ -745,6 +745,98 @@ button[type="button"] {
 #cartVuoto {
 	font-size: 20px;
 }
+
+/*Admin------------------------------------------*/
+
+.container {
+	padding: 0px;
+	display: block;
+	unicode-bidi: isolate;
+}
+
+.myh2 {
+	text-align: center;
+}
+
+.myP {
+	margin-left: 20px;
+}
+
+.last {
+	margin-left: auto;
+	margin-right: 1%;
+	align-content: center;
+	height: 50px;
+}
+
+.dataContainer {
+	position: relative;
+	padding: 0 5%;
+}
+
+.modifyBtn {
+	font-size: 0px;
+	padding-right: 20px;
+	padding-top: 10px;
+	width: auto;
+}
+
+.cart-item .removeItem {
+	width: 25px;
+	height: 25px;
+	margin-left: 5px
+}
+
+.btnAction {
+	padding: 3px;
+	display: inline-block;
+	align-items: center;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	background-color: #CE8946;
+	color: #fff;
+	border-radius: 20px;
+	padding-bottom: 5px;
+	width: 63px;
+}
+
+.btnAction:hover {
+	background-color: #B06E2E;
+}
+
+.btnActionDelete {
+	padding: 10px;
+	display: inline-block;
+	align-items: center;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	background-color: #CE8946;
+	color: #fff;
+	border-radius: 20px;
+	width: 63px;
+}
+
+.btnActionDelete:hover {
+	background-color: #B06E2E;
+}
+
+.addBtn {
+	padding: 10px 20px;
+	vertical-align: 15px;
+	margin-left: 18px;
+	text-decoration: solid;
+	color: #CE8946;
+	background-color: #3b5d50;
+	border-radius: 50px;
+	opacity: 0.9;
+	font-weight: bold;
+}
+
+.addBtn:hover {
+	opacity: 0.8;
+}
 /*Media------------------------------------------*/
 
 @media (min-width : 500px) {
