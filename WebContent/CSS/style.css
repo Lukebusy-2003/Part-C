@@ -731,10 +731,6 @@ button[type="button"] {
 	height: 50px;
 }
 
-.dataContainer {
-	position: relative;
-	padding: 0 5%;
-}
 
 .center-item {
 	display: flex;
@@ -836,6 +832,12 @@ button[type="button"] {
 
 .addBtn:hover {
 	opacity: 0.8;
+}
+
+/*GestioneProfili--------------------------------*/
+
+#myP2 {
+	text-align: center;
 }
 /*Media------------------------------------------*/
 
