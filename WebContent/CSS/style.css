@@ -839,6 +839,33 @@ button[type="button"] {
 #myP2 {
 	text-align: center;
 }
+
+/*Gestione Acquisti------------------------------*/
+
+.filterAdmin {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 18px;
+}
+
+.filterForm {
+	display: block;
+	margin-top: 0em;
+	unicode-bidi: isolate;
+}
+
+button.addBtnFilter {
+	padding: 16px 20px;
+	margin-left: 5px;
+	color: #CE8946;
+	background-color: #3b5d50;
+	border-radius: 50px;
+	opacity: 0.9;
+	font-weight: bold;
+	border-width: 0px;
+	font-size: 14px;
+}
 /*Media------------------------------------------*/
 
 @media (min-width : 500px) {
