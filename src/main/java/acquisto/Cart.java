@@ -4,19 +4,18 @@ import prodotto.ProductBean;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+
+
 public class Cart {
 
-	// Variabili
 	private final ArrayList<ProductBean> products;
 	private int count;
 	
-	// Costruttore
 	public Cart() {
 		products = new ArrayList<ProductBean>();
 		count = 0;
 	}
 	
-	// Metodo aggiunta prodotto al carrello
 	public void addProduct(ProductBean product, int q) {
 	    if(product != null && q > 0) {
 			if (products.isEmpty()) {
@@ -43,7 +42,7 @@ public class Cart {
 	
 	    }
 	}    
-	// Metodo rimozione prodotto dal carrello
+
 	public void deleteProduct(ProductBean product,int quantity) {
 		if(quantity>0) {
 			for(ProductBean prod : products) {
@@ -56,7 +55,6 @@ public class Cart {
 	 	}
 	}	
 	
-	// Metodi get
 	public int getCount(){
 		return count;
 	}

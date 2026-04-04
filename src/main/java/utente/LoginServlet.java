@@ -22,10 +22,12 @@ public class LoginServlet extends HttpServlet {
 		
 			String email = request.getParameter("email");
 			String password = request.getParameter("pwd");
+
+			
 			
 			List<String> errors = new ArrayList<>();
+        	//RequestDispatcher dispatcherToLoginPage = request.getRequestDispatcher("login.jsp");
 
-			// Validazione input
 			if(email == null || email.trim().isEmpty()) {
 				errors.add("Il campo username non può essere vuoto!");
 			}
@@ -35,6 +37,8 @@ public class LoginServlet extends HttpServlet {
             if (!errors.isEmpty()) {
             	request.setAttribute("errors", errors);
             	response.sendRedirect("login.jsp");
+            	//dispatcherToLoginPage.forward(request, response);
+                // note the return statement here!!!
             }
             else{
             email = email.trim();
@@ -43,31 +47,40 @@ public class LoginServlet extends HttpServlet {
            
            
             try {
-                u = d.doRetrieveByEmail(email);
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            // Controllo credenziali
-            if (u != null && u.getPassword().equals(password)) {
-                request.getSession().setAttribute("user", u);
-
-                response.sendRedirect("index.jsp");
+				u = d.doRetrieveByEmail(email);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+            /*
+            if (u == null) {
+                System.out.println("DEBUG - Utente non trovato con email: " + email);
             } else {
-                errors.add("email o password errate");
-                request.setAttribute("errors", errors);
-                response.sendRedirect("login.jsp");
-                //request.getRequestDispatcher("login.jsp").forward(request, response);
-                //return;
+                System.out.println("DEBUG - Password recuperata dal DB: " + u.getPassword());
             }
-        }
-    }
+            */
+           			
+            if(u != null && u.getPassword().equals(password)) {
+            	request.getSession().setAttribute("user", u);
+            	/*
+            	RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            	dispatcher.forward(request, response);
+
+            	 */
+				response.sendRedirect("index.jsp");
+			} else {
+				errors.add("email o password errate");
+				request.setAttribute("errors", errors);
+				response.sendRedirect("login.jsp");
+				//dispatcherToLoginPage.forward(request, response);
+			}
+	}
+   }
 	
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request,response);
 	}	
 }

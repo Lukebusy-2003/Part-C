@@ -34,7 +34,6 @@ public class RegisterServlet extends HttpServlet {
 			
 			List<String> errors = new ArrayList<>();
         	RequestDispatcher dispatcherToLoginPage = request.getRequestDispatcher("login.jsp");
-        	
         	try {
 				u = d.doRetrieveByEmail(email);
 				if(u == null) u = new User();
@@ -43,7 +42,6 @@ public class RegisterServlet extends HttpServlet {
 				e.printStackTrace();
 			}
         	
-        	// Validazione dei campi input
         	if(nome == null || nome.trim().isEmpty()) errors.add("Il campo nome non può essere vuoto!");
         	else u.setNome(nome);
         	

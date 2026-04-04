@@ -7,16 +7,15 @@ public class ProductBean implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String[] CATEGORIE = {"Motherboard", "PSU", "RAM", "CPU", "GPU", "Storage", "Case", "Acc"};
 
-    // Variabili
     private int code;
     private String name;
     private double price;
-    private int quantity;  
+    private int quantity;  // sempre int per evitare problemi in JSP
     private String category;
     private String photo;
     private boolean available;
 
-    //Costruttore vuoto
+    // Costruttore vuoto
     public ProductBean() {
         this.code = -1;
         this.name = "";
@@ -27,7 +26,7 @@ public class ProductBean implements Serializable {
         this.available = true;
     }
 
-    //Costruttore con campi principali
+    // Costruttore con campi principali
     public ProductBean(int code, String name, double price, String category) {
         this.code = code;
         this.name = name;
@@ -38,53 +37,20 @@ public class ProductBean implements Serializable {
         this.available = true;
     }
 
-    //Metodi get
-    public int getCode() { 
-    	return code; 
-    }
-    
-    public String getName() {
-    	return name; 
-    }
-    
-    public double getPrice() {
-    	return price; 
-    }
-    
-    public int getQuantity() {
-    	return quantity; 
-    }
-    
-    public String getCategory() {
-    	return category; 
-    }
-    
-    public String getPhoto() {
-    	return photo; 
-    }
-    
-    public boolean isAvailable() {
-    	return available; 
-    }
+    // GETTER
+    public int getCode() { return code; }
+    public String getName() { return name; }
+    public double getPrice() { return price; }
+    public int getQuantity() { return quantity; }
+    public String getCategory() { return category; }
+    public String getPhoto() { return photo; }
+    public boolean isAvailable() { return available; }
 
-    //Metodi set
-    
-    public void setCode(int code) {
-    	this.code = code; 
-    }
-    
-    public void setName(String name) {
-    	this.name = name; 
-    }
-    
-    public void setPrice(double price) {
-    	this.price = price; 
-    }
-    
-    public void setQuantity(int quantity) {
-    	this.quantity = quantity; 
-    } 
-    
+    // SETTER
+    public void setCode(int code) { this.code = code; }
+    public void setName(String name) { this.name = name; }
+    public void setPrice(double price) { this.price = price; }
+    public void setQuantity(int quantity) { this.quantity = quantity; } // int coerente
     public void setCategory(String category) {
         for (String c : CATEGORIE) {
             if (c.equals(category)) {
@@ -92,16 +58,10 @@ public class ProductBean implements Serializable {
                 return;
             }
         }
-        this.category = ""; 
+        this.category = ""; // fallback se categoria non valida
     }
-    
-    public void setPhoto(String photo) {
-    	this.photo = photo; 
-    }
-    
-    public void setAvailable(boolean available) {
-    	this.available = available; 
-    }
+    public void setPhoto(String photo) { this.photo = photo; }
+    public void setAvailable(boolean available) { this.available = available; }
 
     @Override
     public String toString() {

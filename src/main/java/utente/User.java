@@ -2,11 +2,6 @@ package utente;
 
 public class User {
 
-	//Variabili
-	private String nome, cognome, email, password;
-	private boolean isAdmin = false;
-	
-	//Costruttore
 	public User(String nome, String cognome, String email,String password, boolean isAdmin ) {
 	this.nome = nome;
 	this.cognome = cognome;
@@ -16,7 +11,6 @@ public class User {
 	
 	public User(){}
 	
-	//Metodi get
 	public String getNome() {
 		return nome;
 	}
@@ -37,7 +31,8 @@ public class User {
 		return isAdmin;
 	}
 
-	//Metodi set
+
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
@@ -57,4 +52,11 @@ public class User {
 	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
 	}
+	
+
+	
+
+	
+	private String nome, cognome, email, password;
+	private boolean isAdmin = false;
 }

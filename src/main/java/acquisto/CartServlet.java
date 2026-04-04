@@ -14,21 +14,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+
+
 @WebServlet("/CartServlet")
 public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
-	// Metodo Post
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession sessione = request.getSession();
 		int prodottoid = Integer.parseInt(request.getParameter("id"));
 		
 		String azione = request.getParameter("action");
 		Cart c = (Cart) sessione.getAttribute("cart");
-		if (c == null) {
-		    c = new Cart();
-		}
-		
 		ProductDaoDataSource source = new ProductDaoDataSource();
 		int quantita = Integer.parseInt(request.getParameter("quantity"));
 		
@@ -37,29 +35,30 @@ public class CartServlet extends HttpServlet {
 		try {
 			prodotto = source.doRetrieveByKey(prodottoid);
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			// add
+			
 			if(azione != null && azione.equals("add") && prodotto != null) {
+				
 				c.addProduct(prodotto,quantita);
+				
 			}
-			// remove
-			else if(azione != null && azione.equals("remove") && prodotto != null) {
-					c.deleteProduct(prodotto,quantita);
-					response.sendRedirect("cart.jsp");
+			else if(azione != null && azione.equals("remove")) {
+				c.deleteProduct(prodotto,quantita);
+				response.sendRedirect("cart.jsp");
 			}
 			
 			sessione.setAttribute("cart", c);
-			PrintWriter out = response.getWriter();
-		    response.setContentType("text/plain");
-		    response.setCharacterEncoding("UTF-8");
-		        
+			 PrintWriter out = response.getWriter();
+		        response.setContentType("text/plain");
+		        response.setCharacterEncoding("UTF-8");
 		        out.print(c.getCount());
 		        out.flush();
 	}
 
-	// Metodo get
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		doPost(request, response);
 	}
 

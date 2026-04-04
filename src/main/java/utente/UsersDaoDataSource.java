@@ -21,7 +21,6 @@ public class UsersDaoDataSource implements IUsersDAO<User> {
 	private static DataSource ds;
 	private static final String TABLE_NAME = "utente";
 
-	// Connessione al database tramite DataSource
 	static {
 		try {
 			Context initCtx = new InitialContext();
@@ -34,22 +33,21 @@ public class UsersDaoDataSource implements IUsersDAO<User> {
 		}
 	}
 
-	// Aggiunta utente
+	
+
 	@Override
 	public synchronized void doSave(User utente) throws SQLException {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		
-		//Query di inserimento
+
 		String insertSQL = "INSERT INTO " + UsersDaoDataSource.TABLE_NAME
 				+ " (email, pwd, nome, cognome, isAdmin) VALUES (?, ?, ?, ?, ?)";
 
 		try {
 			connection = ds.getConnection();
 			preparedStatement = connection.prepareStatement(insertSQL);
-			
-			// Imposto i valori
 			preparedStatement.setString(3, utente.getNome());
 			preparedStatement.setString(4, utente.getCognome());
 			preparedStatement.setString(1, utente.getEmail());
@@ -68,7 +66,7 @@ public class UsersDaoDataSource implements IUsersDAO<User> {
 		}
 	}
 
-	// Eliminazione utente tramite email
+	
 	@Override
 	public synchronized boolean doDelete(String email) throws SQLException {
 		Connection connection = null;
@@ -97,7 +95,6 @@ public class UsersDaoDataSource implements IUsersDAO<User> {
 		return (result != 0);
 	}
 
-	// Recupera tutti gli utenti
 	@Override
 	public synchronized ArrayList<User> doRetrieveAll(String order) throws SQLException {
 
@@ -136,7 +133,7 @@ public class UsersDaoDataSource implements IUsersDAO<User> {
 	    return utenti;
 	}
 
-	// Ricerca utente per nome
+	
 	@Override
 	public User doRetrieveByName(String name) throws SQLException {
 		Connection connection = null;
@@ -174,7 +171,7 @@ public class UsersDaoDataSource implements IUsersDAO<User> {
 	
 	}
 
-	// Ricerca utente per email
+
 	public User doRetrieveByEmail(String mail) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -186,14 +183,10 @@ public class UsersDaoDataSource implements IUsersDAO<User> {
 		try {
 			connection = ds.getConnection();
 			preparedStatement = connection.prepareStatement(selectSQL);
-			
 			preparedStatement.setString(1, mail);
 
 			ResultSet rs = preparedStatement.executeQuery();
-			
-			//Se non trova risultati
-			if(!rs.isBeforeFirst()) 
-				bean = null;
+			if(!rs.isBeforeFirst()) bean = null;
 			else {
 				while (rs.next()) {
 					
@@ -218,7 +211,8 @@ public class UsersDaoDataSource implements IUsersDAO<User> {
 	
 	}
 	
-	// Aggiorna ruolo admin dell'utente
+	
+	
 	@Override 
 	public void doUpdate(User user) throws SQLException {
 
@@ -232,7 +226,6 @@ public class UsersDaoDataSource implements IUsersDAO<User> {
 	        connection = ds.getConnection();
 	        preparedStatement = connection.prepareStatement(updateSQL);
 
-	        // Imposto nuovi valori
 	        preparedStatement.setBoolean(1, user.isAdmin());
 	        preparedStatement.setString(2, user.getEmail());
 

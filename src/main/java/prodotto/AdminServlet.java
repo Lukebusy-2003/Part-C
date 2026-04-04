@@ -35,8 +35,10 @@ public class AdminServlet extends HttpServlet {
             e.printStackTrace();
         }
 
+        // Metto la lista nella REQUEST (non nella sessione!)
         request.setAttribute("prodotti", prodotti);
-        
+
+        // Forward alla pagina admin.jsp
         RequestDispatcher dispatcher = request.getRequestDispatcher("admin/admin.jsp");
         dispatcher.forward(request, response);
     }

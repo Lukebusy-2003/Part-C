@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 public class ShopServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    // Metodo post
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String filtro = request.getParameter("filter");
         if (filtro == null) filtro = "";
@@ -35,7 +34,6 @@ public class ShopServlet extends HttpServlet {
                     // Mostra solo i prodotti della categoria specifica
                     prodotti = source.doRetrieveByCategory(filtro);
                 }
-            // Ricerca per nome
             } else if ("ricerca".equalsIgnoreCase(azione)) {
                 if (!filtro.isEmpty()) {
                     prodotti = source.doRetrieveByName(filtro);
@@ -43,21 +41,19 @@ public class ShopServlet extends HttpServlet {
                     prodotti = source.doRetrieveAvailable();
                 }
             } else {
-            	// Default
+                // fallback: mostra tutti i prodotti
                 prodotti = source.doRetrieveAvailable();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        // Passa i prodotti alla JSP 
+        // Passa i prodotti alla JSP tramite request, non sessione
         request.setAttribute("products1", prodotti);
-        
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/shop.jsp");
         dispatcher.forward(request, response);
     }
 
-    // Metodo get
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doPost(request, response);

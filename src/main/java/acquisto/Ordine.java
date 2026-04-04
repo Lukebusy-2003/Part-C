@@ -4,16 +4,8 @@ import java.sql.Date;
 
 public class Ordine {
 
-	//Variabili
-	private int ID_ordine;
-	private Date data_acquisto;
-	private String email;
-	private int q_acquisto;
-	private String nome_prodotto;
-	private String categoria_prodotto;	
-	private double prezzo;
 	
-	//Metodi get
+	
 	public int getID_ordine() {
 		return ID_ordine;
 	}
@@ -42,7 +34,6 @@ public class Ordine {
 		return prezzo;
 	}
 	
-	//Metodi set
 	public void setID_ordine(int iD_ordine) {
 		ID_ordine = iD_ordine;
 	}
@@ -70,5 +61,16 @@ public class Ordine {
 	public void setPrezzo(double prezzo) {
 		this.prezzo = prezzo;
 	}
-
+	
+	
+	
+	
+	
+	private int ID_ordine;
+	private Date data_acquisto;
+	private String email;
+	private int q_acquisto;
+	private String nome_prodotto;
+	private String categoria_prodotto;	//modifica da tipo
+	private double prezzo;
 }

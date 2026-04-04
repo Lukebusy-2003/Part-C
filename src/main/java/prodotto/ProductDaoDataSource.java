@@ -21,7 +21,7 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 	private static final String TABLE_NAME = "prodotto";
 	private static DataSource ds;
 
-	//Query
+	// Query
 	private String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE ID_Prodotto = ?";
 	private String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
 	private String deleteSQL = "UPDATE " + TABLE_NAME + " SET disponibile = false WHERE ID_Prodotto = ?";
@@ -42,7 +42,7 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 		}
 	}
 
-	//Aggiunta prodotto
+	// Aggiunta prodotto
 	@Override
 	public void doSave(ProductBean product) throws SQLException {
 
@@ -61,7 +61,7 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 	        preparedStatement.setDouble(2, product.getPrice());
 	        preparedStatement.setInt(3, product.getQuantity());
 	        preparedStatement.setString(4, product.getCategory());
-	        preparedStatement.setString(5, product.getPhoto()); 
+	        preparedStatement.setString(5, product.getPhoto()); // sarà null va bene
 	        preparedStatement.setBoolean(6, product.isAvailable());
 
 	        preparedStatement.executeUpdate();
@@ -74,7 +74,7 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 	    }
 	}
 
-	//Aggiorna prodotto
+	// Aggiorna prodotto
 	@Override
 	public void doUpdate(ProductBean product) throws SQLException {
 	    Connection connection = null;
@@ -105,7 +105,7 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 	    }
 	}
 
-	//Rimozione prodotto
+	// Rimozione prodotto
 	@Override
 	public boolean doRemove(int code) throws SQLException {
 	    Connection connection = null;
@@ -143,15 +143,15 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 
 	        ResultSet rs = preparedStatement.executeQuery();
 
-	        if (rs.next()) {  
+	        if (rs.next()) {  // non serve isBeforeFirst
 	            bean = new ProductBean();
 	            bean.setCode(rs.getInt("ID_prodotto"));
 	            bean.setName(rs.getString("nome"));
 	            bean.setCategory(rs.getString("categoria"));
 	            bean.setPhoto(rs.getString("foto"));
 	            bean.setPrice((float) rs.getDouble("prezzo"));
-	            bean.setQuantity(rs.getInt("quantita"));  
-	            bean.setAvailable(rs.getBoolean("disponibile")); 
+	            bean.setQuantity(rs.getInt("quantita"));  // <-- aggiunto
+	            bean.setAvailable(rs.getBoolean("disponibile")); // se vuoi
 	        }
 
 	    } finally {
@@ -161,7 +161,7 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 	    return bean;
 	}
 
-	//Cerca prodotto per nome
+	// Cerca prodotto per nome
 	@Override
 	public ArrayList<ProductBean> doRetrieveByName(String name) throws SQLException {
 
@@ -203,7 +203,7 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 	}
 
 
-	//Cerca prodotto per categoria
+	// Cerca prodotto per categoria
 	@Override
 	public ArrayList<ProductBean> doRetrieveByCategory(String categoria) throws SQLException {
 
@@ -288,7 +288,7 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 	}
 
 
-	//Tutti i prodotti
+	// Tutti i prodotti
 	@Override
 	public ArrayList<ProductBean> doRetrieveAll(String order) throws SQLException {
 
@@ -314,11 +314,11 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 			while (rs.next()) {
 			    ProductBean bean = new ProductBean();
 
-			    bean.setCode(rs.getInt("ID_prodotto"));      
+			    bean.setCode(rs.getInt("ID_prodotto"));      // <-- AGGIUNGI QUESTO
 			    bean.setName(rs.getString("nome"));
 			    bean.setCategory(rs.getString("categoria"));
 			    bean.setPrice(rs.getFloat("prezzo"));
-			    bean.setQuantity(rs.getInt("quantita"));    
+			    bean.setQuantity(rs.getInt("quantita"));    // <-- AGGIUNGI QUESTO
 			    bean.setPhoto(rs.getString("foto"));
 			    bean.setAvailable(rs.getBoolean("disponibile"));
 
@@ -338,54 +338,52 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 	}
 
 	// Registra un ordine e i prodotti acquistati
-		@Override
-		public void doBuy(ArrayList<ProductBean> products, User u) throws SQLException {
-		    String Ordinesql = "INSERT INTO ordine(data_acquisto, email) VALUES(?,?)";
-		    String Prodottisql = "INSERT INTO acquisto(ID_ordine,q_acquisto,nome_prodotto,categoria_prodotto,prezzo) VALUES(?,?,?,?,?)";
+	@Override
+	public void doBuy(ArrayList<ProductBean> products, User u) throws SQLException {
+	    String Ordinesql = "INSERT INTO ordine(data_acquisto, email) VALUES(?,?)";
+	    String Prodottisql = "INSERT INTO acquisto(ID_ordine,q_acquisto,nome_prodotto,categoria_prodotto,prezzo) VALUES(?,?,?,?,?)";
 
-		    Connection connection = null;
-		    PreparedStatement preparedStatement = null;
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
 
-		    connection = ds.getConnection();
-		    try {
-		        // Inserimento ordine
-		        preparedStatement = connection.prepareStatement(Ordinesql, Statement.RETURN_GENERATED_KEYS);
-		        preparedStatement.setDate(1, Date.valueOf(java.time.LocalDate.now()));
-		        preparedStatement.setString(2, u.getEmail());
-		        preparedStatement.executeUpdate();
+	    connection = ds.getConnection();
+	    try {
+	        // Inserimento ordine
+	        preparedStatement = connection.prepareStatement(Ordinesql, Statement.RETURN_GENERATED_KEYS);
+	        preparedStatement.setDate(1, Date.valueOf(java.time.LocalDate.now()));
+	        preparedStatement.setString(2, u.getEmail());
+	        preparedStatement.executeUpdate();
 
-		        ResultSet rs = preparedStatement.getGeneratedKeys();
-		        int generatedId = -1;
-		        if (rs.next()) {
-		            generatedId = rs.getInt(1);
-		        } else {
-		            throw new SQLException("Errore generazione ID ordine");
-		        }
-		        preparedStatement.close();
+	        ResultSet rs = preparedStatement.getGeneratedKeys();
+	        int generatedId = -1;
+	        if (rs.next()) {
+	            generatedId = rs.getInt(1);
+	        } else {
+	            throw new SQLException("Errore generazione ID ordine");
+	        }
+	        preparedStatement.close();
 
-		        // Inserimento prodotti
-		        preparedStatement = connection.prepareStatement(Prodottisql);
-		        for (ProductBean p : products) {
-		            preparedStatement.setInt(1, generatedId);
-		            preparedStatement.setInt(2, p.getQuantity());                
-		            preparedStatement.setString(3, p.getName());                 
-		            preparedStatement.setString(4, p.getCategory());             
-		            preparedStatement.setDouble(5, p.getPrice() * p.getQuantity()); 
+	        // Inserimento prodotti
+	        preparedStatement = connection.prepareStatement(Prodottisql);
+	        for (ProductBean p : products) {
+	            preparedStatement.setInt(1, generatedId);
+	            preparedStatement.setInt(2, p.getQuantity());                // quantità
+	            preparedStatement.setString(3, p.getName());                 // nome_prodotto
+	            preparedStatement.setString(4, p.getCategory());             // categoria_prodotto
+	            preparedStatement.setDouble(5, p.getPrice() * p.getQuantity()); // prezzo totale per il prodotto
 
-		            preparedStatement.addBatch();
-		        }
-		        preparedStatement.executeBatch();
+	            preparedStatement.addBatch();
+	        }
+	        preparedStatement.executeBatch();
 
-		    } finally {
-		        if (preparedStatement != null) preparedStatement.close();
-		        if (connection != null) connection.close();
-		    }
-		}
-
-
+	    } finally {
+	        if (preparedStatement != null) preparedStatement.close();
+	        if (connection != null) connection.close();
+	    }
+	}
 
 
-	//Restituisce i 3 prodotti con il prezzo minore 
+	// Restituisce per ogni categoria il prodotto con il prezzo min (LIMIT 3)
 	@Override
 	public ArrayList<ProductBean> doRetriveByMinPrice() throws SQLException {
 		String query = "SELECT * " + "FROM " + ProductDaoDataSource.TABLE_NAME
