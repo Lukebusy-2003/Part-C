@@ -337,12 +337,52 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 		return products;
 	}
 
-	/*Registra un ordine e i prodotti acquistati
-	@Override
-	public void doBuy(ArrayList<ProductBean> products, User u) throws SQLException {
+	// Registra un ordine e i prodotti acquistati
+		@Override
+		public void doBuy(ArrayList<ProductBean> products, User u) throws SQLException {
+		    String Ordinesql = "INSERT INTO ordine(data_acquisto, email) VALUES(?,?)";
+		    String Prodottisql = "INSERT INTO acquisto(ID_ordine,q_acquisto,nome_prodotto,categoria_prodotto,prezzo) VALUES(?,?,?,?,?)";
 
-	}
-	*/
+		    Connection connection = null;
+		    PreparedStatement preparedStatement = null;
+
+		    connection = ds.getConnection();
+		    try {
+		        // Inserimento ordine
+		        preparedStatement = connection.prepareStatement(Ordinesql, Statement.RETURN_GENERATED_KEYS);
+		        preparedStatement.setDate(1, Date.valueOf(java.time.LocalDate.now()));
+		        preparedStatement.setString(2, u.getEmail());
+		        preparedStatement.executeUpdate();
+
+		        ResultSet rs = preparedStatement.getGeneratedKeys();
+		        int generatedId = -1;
+		        if (rs.next()) {
+		            generatedId = rs.getInt(1);
+		        } else {
+		            throw new SQLException("Errore generazione ID ordine");
+		        }
+		        preparedStatement.close();
+
+		        // Inserimento prodotti
+		        preparedStatement = connection.prepareStatement(Prodottisql);
+		        for (ProductBean p : products) {
+		            preparedStatement.setInt(1, generatedId);
+		            preparedStatement.setInt(2, p.getQuantity());                
+		            preparedStatement.setString(3, p.getName());                 
+		            preparedStatement.setString(4, p.getCategory());             
+		            preparedStatement.setDouble(5, p.getPrice() * p.getQuantity()); 
+
+		            preparedStatement.addBatch();
+		        }
+		        preparedStatement.executeBatch();
+
+		    } finally {
+		        if (preparedStatement != null) preparedStatement.close();
+		        if (connection != null) connection.close();
+		    }
+		}
+
+
 
 
 	//Restituisce i 3 prodotti con il prezzo minore 
