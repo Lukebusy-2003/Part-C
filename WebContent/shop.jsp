@@ -5,10 +5,11 @@
 <%
 DecimalFormat df = new DecimalFormat("#.##");
 
+// Recupera i prodotti dal request attribute (impostato dalla ShopServlet)
 ArrayList<ProductBean> prodotti = (ArrayList<ProductBean>) request.getAttribute("products1");
 
 if (prodotti == null) {
-    prodotti = new ArrayList<>(); 
+    prodotti = new ArrayList<>(); // fallback se la lista è vuota
 }
 %>
 
@@ -138,11 +139,11 @@ if (prodotti == null) {
 </main>
 
 
-
+<!-- POPUP AGGIUNTA CARRELLO -->
 <div class="popup-overlay" id="popupOverlay">
-    <div class="popup">
+    <div class="popup" id="popup">
 
-        <a class="close" onclick="closePopupFunc()">x</a>
+        <a class="close" id="closePopup" onclick="closePopupFunc()">x</a>
 
         <div class="popup-content">
 

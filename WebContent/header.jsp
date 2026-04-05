@@ -3,8 +3,7 @@
  
 <%
 	User user = (User)session.getAttribute("user");
-	//User user = new User();
-	//user.setAdmin(false);
+
 	
 	Cart cart = (Cart)request.getSession().getAttribute("cart");
 	if(cart == null){
@@ -50,7 +49,7 @@
 						<li><a class="navIconLink" href="Admin"><img class="navIcon" src="img/icons/admin.svg"></a></li>
 					<%}%>
 						<div class="kamehameha">
-							<span class="badge"><%=cart.getCount()%></span>
+							<span class="badge" id="contatoreCarrello"><%=cart.getCount()%></span>
 							<li><a class="navIconLink" href="cart.jsp"><img class="navIcon" src="img/icons/cart.svg"></a></li>
 						</div>
 				</ul>

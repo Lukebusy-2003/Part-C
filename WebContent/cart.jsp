@@ -1,8 +1,22 @@
+<%--suppress LossyEncoding --%>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
 <%@ page
-	import="java.util.ArrayList,prodotto.ProductBean,java.text.DecimalFormat,utente.User"%>
+	import="acquisto.Cart,java.util.ArrayList,prodotto.ProductBean,java.text.DecimalFormat,utente.User"%>
+<%
+	User user = (User)session.getAttribute("user");
 
+	double subtotale = 0.00;
+	double totale = 0.00;
+	
+	DecimalFormat df = new DecimalFormat("#.##");
+
+	Cart c = (Cart)request.getSession().getAttribute("cart"); 
+	ArrayList<ProductBean> prodotti = new ArrayList<ProductBean>();
+	if(c != null) prodotti = c.getProducts();
+	if(c == null) c = new Cart(); 
+	
+	%>
 <head>
 <link rel="shortcut icon" type="image/gif" href="img/logo.png">
 <meta charset="utf-8">
@@ -22,13 +36,13 @@
 			<h1>Carrello</h1>
 		</div>
 	</div>
-	
+
 	<main>
 		<div class="bg">
 			<section>
 				<div class="cartContainer">
 					<div class="cart">
-						
+						<%if(c.getCount()==0){ %>
 
 						<div class="itemContainer" id="empty-cart-message">
 							<div class="cart-item">
@@ -62,7 +76,35 @@ La Scheda video: "Te lo faccio vedere subito!"<br><br>
 							</div>
 						</div>
 
-						
+						<%}else{ 
+			  	for(ProductBean b : prodotti){
+			 		subtotale += (b.getPrice() * b.getQuantity());
+			 		totale = subtotale + 50;%>
+
+
+						<div class="itemContainer">
+							<div class="cart-item">
+								<div class="cartRow">
+									<img id="pImg2" src="<%=b.getPhoto()%>" alt="">
+									<h5 class="itemName"><%=b.getName()%></h5>
+									<h5>
+										<span id="price"><%=df.format(b.getPrice()*b.getQuantity())%> &#128;</span>
+									</h5>
+									<div class="last">
+										<div class="dataContainer center-item">
+											<h5>
+												<span id="Qty"><%=df.format(b.getQuantity())%></span>
+											</h5>
+											<a class="modifyBtn" href="CartServlet?id=<%=b.getCode()%>&action=remove&quantity=<%=b.getQuantity()%>">
+												<img src="img/icons/iconTrash.png" alt="" class="removeItem">
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<%} %>
 						
 						<div class="itemContainer">
 							<div class="cart-item">
@@ -70,30 +112,32 @@ La Scheda video: "Te lo faccio vedere subito!"<br><br>
 								
 									<div class="generiContainer"><h5>Subtotale:</h5></div>
 									<div class="generiContainer status">
-										<h5><span>Prezzo</span> &#128;</h5>
+										<h5><span id="totalPrice"><%=df.format(subtotale)%></span> &#128;</h5>
 									</div>
 									
 									<div class="generiContainer"><h5>Spedizione:</h5></div>
 									<div class="generiContainer status">
-										<h5><span>50</span> &#128;</h5>
+										<h5><span id="totalPrice">50</span> &#128;</h5>
 									</div>
 									
 									<div class="generiContainer"><h5 class="finalPrice">Totale:</h5></div>
 									<div class="generiContainer status">
-										<h5><span class="finalPrice">Prezzo Totale &#128;</span></h5>
+										<h5><span id="totalPrice" class="finalPrice"><%=df.format(totale)%> &#128;</span></h5>
 									</div>
 									
 								</div>
 							</div>
 							<div class="CheckOutContainer">
-
-    <form action="..." method="POST">
+<% if(user != null) { %>
+    <form action="<%=request.getContextPath()%>/Checkout" method="POST">
         <input type="submit" class="checkOutBtn" value="Check Out">
     </form>
-
+<% } else { %>
+    <a href="login.jsp" type="button" class="checkOutBtn">Check Out</a>
+<% } %>
 </div>
 						</div>
-
+						<%} %>
 					</div>
 				</div>
 			</section>
@@ -102,7 +146,7 @@ La Scheda video: "Te lo faccio vedere subito!"<br><br>
 
 	<jsp:include page="footer.html"></jsp:include>
 
-
+	<script type="text/javascript" src="JS/scripts.js"></script>
 </body>
 
 </html>

@@ -9,8 +9,10 @@ try {
     ProductDaoDataSource dao = new ProductDaoDataSource();
     prodotti = dao.doRetrieveAvailable();
 
+    // Ordina per prezzo crescente
     prodotti.sort((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
 
+    // Prendi solo i primi 3 prodotti
     if(prodotti.size() > 3) {
         prodotti = new ArrayList<>(prodotti.subList(0, 3));
     }
@@ -43,7 +45,6 @@ try {
 		</div>
 	</div>
 
-
 	<main>
 		<div class="divider"><span>PRODOTTI CONSIGLIATI</span></div>
 
@@ -73,9 +74,9 @@ try {
 				</div>
 			<%}}%>
 			</div>
-			<div class="popup-overlay">
-				<div class="popup">
-					<a class="close" onclick="closePopupFunc()">x</a>
+			<div class="popup-overlay" id="popupOverlay">
+				<div class="popup" id="popup">
+					<a class="close" id="closePopup" onclick="closePopupFunc()">x</a>
 					<div class="popup-content">
 						<p>inserisci quantita':</p>
 						<div class="wau">
