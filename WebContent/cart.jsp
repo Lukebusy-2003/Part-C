@@ -1,4 +1,3 @@
-<%--suppress LossyEncoding --%>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
 <%@ page

@@ -91,7 +91,7 @@ if(utenti != null && !utenti.isEmpty()){
     }
 } else {
 %>
-<p id="myP2">Nessun utente trovato</p>
+<p style="text-align:center;">Nessun utente trovato</p>
 <%
 }
 %>
@@ -101,7 +101,7 @@ if(utenti != null && !utenti.isEmpty()){
 
 <script src="JS/users.js"></script>
 
-<div class="popup-overlay">
+<div class="popup-overlay" id="editPopupOverlay">
     <div class="popup">
 
         <a class="close" onclick="closeEditPopup()">x</a>
@@ -112,9 +112,9 @@ if(utenti != null && !utenti.isEmpty()){
 
             <form action="UpdateUserServlet" method="post">
 
-                <input type="hidden" name="email">
+                <input type="hidden" name="email" id="editEmail">
 
-                <select name="admin">
+                <select name="admin" id="editAdmin">
                     <option value="true">Admin</option>
                     <option value="false">Utente</option>
                 </select>
@@ -129,7 +129,7 @@ if(utenti != null && !utenti.isEmpty()){
     </div>
 </div>
 
-<div class="popup-overlay">
+<div class="popup-overlay" id="deletePopupOverlay">
     <div class="popup">
 
 
@@ -139,9 +139,9 @@ if(utenti != null && !utenti.isEmpty()){
             <h3>Sei sicuro di eliminare questo utente?</h3>
 
             <form action="DeleteUserServlet" method="post">
-                <input type="hidden" name="email">
+                <input type="hidden" name="email" id="deleteEmail">
                 <button type="submit" class="btnActionDelete">Sì</button>
-                <button type="button" class="popup-content button" onclick="closeDeletePopup()">Annulla</button>
+                <button type="button" class="btnAction" class="popup-content button" onclick="closeDeletePopup()">Annulla</button>
             </form>
 
         </div>

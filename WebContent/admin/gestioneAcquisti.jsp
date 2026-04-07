@@ -59,7 +59,7 @@ if(end == null) end = java.time.LocalDate.now().toString();
 
                 <form class="filterForm" method="POST" action="Ordini">
 
-                    <input name="user" type="text" placeholder="Email utente..."
+                    <input name="user" id="orderFilter" type="text" placeholder="Email utente..."
                            value="<%= user %>"/>
 
                     <input type="date" name="start" value="<%= start %>"/>

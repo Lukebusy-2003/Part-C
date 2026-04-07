@@ -21,7 +21,7 @@
     
     <input type="number" name="price" placeholder="Prezzo" step="0.01" min="0" required>
     
-    <input type="number" name="quantity" placeholder="Quantità" step="1" min="0" required>
+    <input type="number" name="quantity" placeholder="Quantita'" step="1" min="0" required>
     
     <select name="available" required>
         <option value="1">Disponibile</option>

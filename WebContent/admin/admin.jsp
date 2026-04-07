@@ -107,18 +107,19 @@ if(prodotti != null && !prodotti.isEmpty()){
 </div>
 </main>
 
-<div class="popup-overlay">
+<!-- Popup modifica prodotto -->
+<div class="popup-overlay" id="editPopupOverlay">
     <div class="popup">
         <a class="close" onclick="closeEditPopup()">x</a>
         <h3 id="myH3">Modifica prodotto</h3>
         <form action="<%=request.getContextPath()%>/AggiornaProdottoServlet" method="post">
-            <input type="hidden" name="id">
+            <input type="hidden" name="id" id="editCode">
 
             <label for="editPrice">Prezzo:</label>
-            <input type="number" step="0.01" min="0" name="price" required>
+            <input type="number" step="0.01" min="0" name="price" id="editPrice" required>
 
             <label for="editAvailable">Disponibilità:</label>
-            <select name="available">
+            <select name="available" id="editAvailable">
                 <option value="1">Disponibile</option>
                 <option value="0">Non disponibile</option>
             </select>
@@ -128,13 +129,13 @@ if(prodotti != null && !prodotti.isEmpty()){
     </div>
 </div>
 
-
-<div class="popup-overlay">
+<!-- Popup conferma eliminazione -->
+<div class="popup-overlay" id="deletePopupOverlay">
     <div class="popup">
 
         <h3>Sei sicuro di eliminare questo prodotto?</h3>
         <form class="popup-content" action="<%=request.getContextPath()%>/EliminaServlet" method="post">
-            <input type="hidden" name="id">
+            <input type="hidden" name="id" id="deleteCode">
             <button type="submit" class="btnActionDelete">Sì</button>
             <button type="button" class="btnAction" onclick="closeDeletePopup()">No</button>
         </form>
