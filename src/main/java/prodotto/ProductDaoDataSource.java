@@ -207,42 +207,35 @@ public class ProductDaoDataSource implements IProductDAO<ProductBean> {
 	@Override
 	public ArrayList<ProductBean> doRetrieveByCategory(String categoria) throws SQLException {
 
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
 
-		ArrayList<ProductBean> beanz = new ArrayList<ProductBean>();
+	    ArrayList<ProductBean> beanz = new ArrayList<ProductBean>();
 
-		String selectNameSQL = "SELECT * FROM " + ProductDaoDataSource.TABLE_NAME + " WHERE categoria = ?";
+	    String selectNameSQL = "SELECT * FROM " + ProductDaoDataSource.TABLE_NAME + " WHERE categoria = ? AND disponibile = true";
 
-		
-		try {
-			connection = ds.getConnection();
-			preparedStatement = connection.prepareStatement(selectNameSQL);
-			preparedStatement.setString(1, categoria);
+	    try {
+	        connection = ds.getConnection();
+	        preparedStatement = connection.prepareStatement(selectNameSQL);
+	        preparedStatement.setString(1, categoria);  // Impostiamo il valore della categoria
 
-			ResultSet rs = preparedStatement.executeQuery();
+	        ResultSet rs = preparedStatement.executeQuery();
 
-			while (rs.next()) {
-				ProductBean bean = new ProductBean();
-				bean.setCode(rs.getInt("ID_prodotto"));
-				bean.setName(rs.getString("nome"));
-				bean.setCategory(rs.getString("categoria"));
-				bean.setPhoto(rs.getString("foto"));
-				bean.setPrice((float)rs.getDouble("prezzo"));
-				beanz.add(bean);
-			
-			}
+	        while (rs.next()) {
+	            ProductBean bean = new ProductBean();
+	            bean.setCode(rs.getInt("ID_prodotto"));
+	            bean.setName(rs.getString("nome"));
+	            bean.setCategory(rs.getString("categoria"));
+	            bean.setPhoto(rs.getString("foto"));
+	            bean.setPrice((float) rs.getDouble("prezzo"));
+	            beanz.add(bean);
+	        }
 
-		} finally {
-			try {
-				if (preparedStatement != null)
-					preparedStatement.close();
-			} finally {
-				if (connection != null)
-					connection.close();
-			}
-		}
-		return beanz;
+	    } finally {
+	        if (preparedStatement != null) preparedStatement.close();
+	        if (connection != null) connection.close();
+	    }
+	    return beanz;
 	}
 
 
